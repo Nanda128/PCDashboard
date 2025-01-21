@@ -36,5 +36,6 @@
             "level": "DEBUG",
             "propagate": true
         }
-    }
+    },
+    "logging": "ErrorsOnly"
 }
