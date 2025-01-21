@@ -9,9 +9,6 @@ Nandakishore Vinayakrishnan - 23070854
 ## Features
 [FEATURES IN PROGRESS]
 
-## Installation
-[INSTALLATION IN PROGRESS]
-
 ## Setting up the virtual environment
 
 1. Create a virtual environment:

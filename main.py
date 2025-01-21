@@ -1,11 +1,14 @@
+from flask import Flask
 from logger import LoggerManager
 
 logger = LoggerManager().get_logger()
 
-logger.debug("This is a debug message")
-logger.info("This is an info message")
-logger.warning("This is a warning message")
-logger.error("This is an error message")
-logger.critical("This is a critical message")
+app = Flask(__name__)
 
-# Temporary code to test the logger
+@app.route('/')
+def index():
+    return "Welcome to the Flask Web Application!"
+
+if __name__ == '__main__':
+    logger.info('Web App successfully started!')
+    app.run(debug=True)
