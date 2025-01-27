@@ -12,11 +12,11 @@ def index():
     logger.info('Rendering index page...')
     return render_template('index.html')
 
-@app.route('/dashboard')
-def dashboard():
-    logger.info('Rendering dashboard page...')
+@app.route('/processes')
+def processes():
+    logger.info('Rendering processes page...')
     processes = get_running_applications()
-    return render_template('dashboard.html', processes=processes)
+    return render_template('processes.html', processes=processes)
 
 @app.route('/terminate/<int:pid>', methods=['POST'])
 def terminate(pid):
@@ -29,7 +29,7 @@ def terminate(pid):
     except (psutil.NoSuchProcess, psutil.AccessDenied):
         logger.error('Failed to find process with PID: {}'.format(pid))
         pass
-    return redirect(url_for('dashboard'))
+    return redirect(url_for('processes'))
 
 if __name__ == '__main__':
     logger.info('Web App successfully started!')
