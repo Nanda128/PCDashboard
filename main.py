@@ -18,17 +18,10 @@ def processes():
     processes = get_running_applications()
     return render_template('processes.html', processes=processes)
 
-@app.route('/terminate/<int:pid>', methods=['POST'])
-def terminate(pid):
-    logger.info('Terminating process with PID: {}'.format(pid))
-    try:
-        p = psutil.Process(pid)
-        process_name = p.name()
-        logger.info('Process name to terminate: {}'.format(process_name))
-        terminate_processes_by_name(process_name)
-    except (psutil.NoSuchProcess, psutil.AccessDenied):
-        logger.error('Failed to find process with PID: {}'.format(pid))
-        pass
+@app.route('/terminate/<string:process_name>', methods=['POST'])
+def terminate(process_name):
+    logger.info('Terminating all processes with name: {}'.format(process_name))
+    terminate_processes_by_name(process_name)
     return redirect(url_for('processes'))
 
 if __name__ == '__main__':

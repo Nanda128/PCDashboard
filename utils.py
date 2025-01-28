@@ -1,18 +1,23 @@
 import psutil
+import json
 from logger import LoggerManager
 
 logger = LoggerManager().get_logger()
 
 def get_running_applications():
     logger.info('Getting running applications...')
-    processes = []
+    processes = {}
     for p in psutil.process_iter(['pid', 'name']):
         try:
             if p.info['name'] and p.info['pid'] != 0:
-                processes.append((p.info['pid'], p.info['name']))
+                if p.info['name'] not in processes:
+                    processes[p.info['name']] = []
+                processes[p.info['name']].append(p.info['pid'])
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             logger.error('Failed to get process information for PID: {}'.format(p.info['pid']))
             pass
+    processes_json = json.dumps(processes, indent=4)
+    logger.info('Running applications: {}'.format(processes_json))
     return processes
 
 def terminate_processes_by_name(process_name):

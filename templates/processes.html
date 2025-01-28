@@ -10,10 +10,10 @@
 <body>
     <h1>Running Processes</h1>
     <ul>
-    {% for pid, name in processes %}
-        <li>{{ pid }} - {{ name }}
-            <form action="/terminate/{{ pid }}" method="post" style="display:inline;">
-                <button type="submit">Terminate Process</button>
+    {% for name, pids in processes.items() %}
+        <li>{{ name }} - {{ pids|join(', ') }}
+            <form action="/terminate/{{ name }}" method="post" style="display:inline;">
+                <button type="submit">Terminate All {{ name }} Processes</button>
             </form>
         </li>
     {% endfor %}
