@@ -2,3 +2,4 @@ logging
 colorlog
 flask
 psutil
+requests

@@ -1,11 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for
-from utils import get_running_applications, terminate_processes_by_name
+from utils import get_running_applications, terminate_processes_by_name, send_process_data_to_server
+import json
 from logger import LoggerManager
-import psutil
 
 logger = LoggerManager().get_logger()
 
 app = Flask(__name__)
+
+with open('config.json') as config_file:
+    config = json.load(config_file)
 
 @app.route('/')
 def index():
@@ -16,6 +19,8 @@ def index():
 def processes():
     logger.info('Rendering processes page...')
     processes = get_running_applications()
+    server_url = config.Server.URL 
+    send_process_data_to_server(processes, server_url)
     return render_template('processes.html', processes=processes)
 
 @app.route('/terminate/<string:process_name>', methods=['POST'])
