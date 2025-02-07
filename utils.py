@@ -34,13 +34,3 @@ def terminate_processes_by_name(process_name):
             except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.TimeoutExpired):
                 logger.error('Failed to terminate process with PID: {}'.format(proc.info['pid']))
                 pass
-
-def send_process_data_to_server(process_data, server_url):
-    try:
-        response = requests.post(server_url, json=process_data)
-        if response.status_code == 200:
-            logger.info('Process data successfully sent to server.')
-        else:
-            logger.error('Failed to send process data to server. Status code: {}'.format(response.status_code))
-    except requests.RequestException as e:
-        logger.error('Exception occurred while sending process data to server: {}'.format(e))
