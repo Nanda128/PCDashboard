@@ -38,9 +38,8 @@
         }
     },
     "logging": "Extensive",
-    "Server": {
-        "URL": "http://localhost:8080",
-        "host": "localhost",
-        "port": 8080
+    "RemoteUser": {
+        "IP": "109.77.44.39",
+        "Port": "5000"
     }
 }
