@@ -39,7 +39,6 @@
     },
     "logging": "Extensive",
     "RemoteUser": {
-        "IP": "109.77.44.39",
         "Port": "5000"
     }
 }

@@ -3,3 +3,4 @@ colorlog
 flask
 psutil
 requests
+flask_cors
