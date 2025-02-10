@@ -17,9 +17,12 @@ def get_running_applications():
     processes = {}
     for p in psutil.process_iter(['pid', 'name']):
         try:
+            logger.info('Processes found!')
             if p.info['name'] and p.info['pid'] != 0:
+                logger.debug('Process name: {}, PID: {}'.format(p.info['name'], p.info['pid']))
                 if p.info['name'] not in processes:
                     processes[p.info['name']] = []
+                    logger.debug('Adding process name to list: {}'.format(p.info['name']))
                 processes[p.info['name']].append(p.info['pid'])
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             logger.error('Failed to retrieve process information')

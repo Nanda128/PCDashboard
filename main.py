@@ -19,7 +19,8 @@ def processes():
 
 @app.route('/terminate/<string:process_name>', methods=['POST'])
 def terminate(process_name):
-    terminate_remote_processes_by_name(process_name)
+    process_data = json.dumps({'process_name': process_name})
+    terminate_remote_processes_by_name(process_data)
     return redirect(url_for('processes'))
 
 if __name__ == '__main__':
