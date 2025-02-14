@@ -38,7 +38,13 @@
         }
     },
     "logging": "Extensive",
-    "RemoteUser": {
-        "Port": "5000"
+    "Server": {
+        "host": "https://nanda128.eu.pythonanywhere.com"
+    },
+    "Database": {
+        "host": "Nanda128.mysql.eu.pythonanywhere-services.com",
+        "database": "Nanda128$Processes",
+        "user": "Nanda128",
+        "password": "NandaDBPass"
     }
 }

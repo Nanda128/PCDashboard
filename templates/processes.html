@@ -19,12 +19,11 @@
         {% endif %}
     {% endwith %}
     <ul>
-    {% for name, pids in processes.items() %}
-        <li>{{ name }} - {{ pids|join(', ') }}
-            <form action="/terminate/{{ name }}" method="post" style="display:inline;">
-                <button type="submit">Terminate All {{ name }} Processes</button>
-            </form>
-        </li>
+    {% for process in processes %}
+        {% set process_data = process['processes'] | fromjson %}
+        {% for name, pids in process_data.items() %}
+            <li>{{ name }} - {{ pids|join(', ') }}</li>
+        {% endfor %}
     {% endfor %}
     </ul>
     <a href="{{ url_for('index') }}">
