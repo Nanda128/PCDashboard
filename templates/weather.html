@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Current Weather</h1>
+    <div class="form-container">
+        <form method="POST" action="{{ url_for('weather') }}">
+            <label for="city">Enter a city:</label>
+            <input type="text" name="city" id="city" class="text-box" value="{{ selected_city }}">
+            <label for="units">Choose units:</label>
+            <select name="units" id="units" class="dropdown-box">
+                <option value="metric" {% if selected_units == 'metric' %}selected{% endif %}>Metric</option>
+                <option value="imperial" {% if selected_units == 'imperial' %}selected{% endif %}>Imperial</option>
+            </select>
+            <button type="submit">Get Weather</button>
+        </form>
+    </div>
+    <div class="weather-container">
+        {% if weather %}
+            <p>Location: {{ weather.name }}</p>
+            <p>Temperature: {{ weather.main.temp }}°{% if selected_units == 'metric' %}C{% else %}F{% endif %}</p>
+            <p>Weather: {{ weather.weather[0].description }}</p>
+            <img src="http://openweathermap.org/img/wn/{{ weather.weather[0].icon }}@2x.png" alt="Weather icon" class="weather-image">
+        {% elif error %}
+            <p>{{ error }}</p>
+        {% else %}
+            <p>Unable to fetch weather data.</p>
+        {% endif %}
+    </div>
+    <a href="{{ url_for('index') }}">
+        <button type="button">Back</button>
+    </a>
+</body>
+</html>

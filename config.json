@@ -3,11 +3,11 @@
     "disable_existing_loggers": false,
     "formatters": {
         "standard": {
-            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+            "format": "%(asctime)s - %(name)s - %(levellevel)s - %(message)s"
         },
         "colored": {
             "()": "colorlog.ColoredFormatter",
-            "format": "%(log_color)s%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "format": "%(log_color)s%(asctime)s - %(name)s - %(levellevel)s - %(message)s",
             "log_colors": {
                 "DEBUG": "blue",
                 "INFO": "green",
@@ -46,5 +46,10 @@
         "database": "Nanda128$Processes",
         "user": "Nanda128",
         "password": "NandaDBPass"
+    },
+    "Weather": {
+        "api_key": "56f0bf4f66e774b2d21c5db9afea1cba",
+        "default_city": "Limerick",
+        "default_units": "metric"
     }
 }
