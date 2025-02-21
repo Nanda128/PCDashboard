@@ -1,0 +1,20 @@
+name: Auto-Deploy Pythonanywhere webapp
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Re-Deploy Pythonanywhere Django API
+        uses: umuttopalak/pythonanywhere-deploy-action@v1.1.0
+        with:
+          host: www.eu.pythonanywhere.com
+          username: Nanda128
+          api_token: ${{ secrets.PYTHONANYWHERE_API_KEY }}
+          domain_name: https://nanda128.eu.pythonanywhere.com
