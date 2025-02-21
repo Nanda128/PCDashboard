@@ -21,7 +21,7 @@ def save_processes_to_db(config, processes):
 def fetch_processes_from_db(config):
     connection = get_db_connection(config)
     cursor = connection.cursor(dictionary=True)
-    cursor.execute("SELECT processes FROM process_data ORDER BY created_at DESC")
+    cursor.execute("SELECT processes FROM process_data ORDER BY created_at DESC LIMIT 1")
     result = cursor.fetchone()
     cursor.close()
     connection.close()
