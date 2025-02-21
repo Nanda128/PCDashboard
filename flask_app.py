@@ -6,6 +6,10 @@ from weather import get_lat_lon, fetch_weather_data
 app = Flask(__name__)
 app.secret_key = 'ubersecretkey'  # Needed for flashing messages
 
+@app.template_filter('fromjson')
+def fromjson_filter(s):
+    return json.loads(s)
+
 CONFIG_PATH = 'mysite/config.json'
 
 def load_config():
