@@ -1,28 +1,47 @@
 import mysql.connector
 import json
 
-def get_db_connection(config):
-    return mysql.connector.connect(
-        host=config['Database']['host'],
-        database=config['Database']['database'],
-        user=config['Database']['user'],
-        password=config['Database']['password']
-    )
+class DatabaseConnection:
+    def __init__(self, config):
+        self.config = config
+        self.connection = None
+
+    def __enter__(self):
+        self.connection = mysql.connector.connect(
+            host=self.config['Database']['host'],
+            database=self.config['Database']['database'],
+            user=self.config['Database']['user'],
+            password=self.config['Database']['password']
+        )
+        return self.connection
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.connection:
+            self.connection.close()
+
+class DatabaseCursor:
+    def __init__(self, connection):
+        self.connection = connection
+        self.cursor = None
+
+    def __enter__(self):
+        self.cursor = self.connection.cursor(dictionary=True)
+        return self.cursor
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.cursor:
+            self.cursor.close()
 
 def save_processes_to_db(config, processes):
-    connection = get_db_connection(config)
-    cursor = connection.cursor()
-    add_process = "INSERT INTO process_data (processes) VALUES (%s)"
-    cursor.execute(add_process, (json.dumps(processes),))
-    connection.commit()
-    cursor.close()
-    connection.close()
+    with DatabaseConnection(config) as connection:
+        with DatabaseCursor(connection) as cursor:
+            add_process = "INSERT INTO process_data (processes) VALUES (%s)"
+            cursor.execute(add_process, (json.dumps(processes),))
+            connection.commit()
 
 def fetch_processes_from_db(config):
-    connection = get_db_connection(config)
-    cursor = connection.cursor(dictionary=True)
-    cursor.execute("SELECT processes FROM process_data ORDER BY created_at DESC LIMIT 1")
-    result = cursor.fetchone()
-    cursor.close()
-    connection.close()
-    return result
+    with DatabaseConnection(config) as connection:
+        with DatabaseCursor(connection) as cursor:
+            cursor.execute("SELECT processes FROM process_data ORDER BY created_at DESC LIMIT 1")
+            result = cursor.fetchall()
+            return result

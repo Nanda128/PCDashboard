@@ -15,14 +15,13 @@ for p in psutil.process_iter(['pid', 'name']):
         logger.error('Failed to retrieve process information')    
 logger.info('Retrieved running applications!')
 
-# Load the URL from config.json
 with open('config.json') as config_file:
     url = json.load(config_file)['Server']['host']
     logger.info(f'Loaded URL from config.json: {url}')
 
-# Send the processes data to the given URL
 try:
-    response = requests.post(f"{url}/processes", json=processes)
+    logger.info(f'Sending processes data to {url}')
+    response = requests.post(f"{url}/processes", json=processes, timeout=10)
     response.raise_for_status()
     logger.info(f'Successfully sent processes data to {url}')
 except requests.RequestException as e:
