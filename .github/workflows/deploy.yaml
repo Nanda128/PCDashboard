@@ -15,6 +15,6 @@ jobs:
         uses: umuttopalak/pythonanywhere-deploy-action@v1.1.0
         with:
           host: www.eu.pythonanywhere.com
-          username: Nanda128
+          username: ${{ secrets.PYTHONANYWHERE_USERNAME }}
           api_token: ${{ secrets.PYTHONANYWHERE_API_KEY }}
-          domain_name: https://nanda128.eu.pythonanywhere.com
+          domain_name: ${{ secrets.PYTHONANYWHERE_DOMAIN_NAME }}
