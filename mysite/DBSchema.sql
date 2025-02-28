@@ -4,3 +4,11 @@ CREATE TABLE process_data (
     ram_usage FLOAT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE weather_data (
+    ID CHAR(36) PRIMARY KEY DEFAULT (UUID()), 
+    city VARCHAR(255) NOT NULL,
+    units VARCHAR(10) NOT NULL,
+    data JSON NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

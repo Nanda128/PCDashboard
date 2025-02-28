@@ -47,6 +47,12 @@
         "user": "Nanda128",
         "password": "NandaDBPass"
     },
+    "WeatherDatabase": {
+        "host": "Nanda128.mysql.eu.pythonanywhere-services.com",
+        "database": "Nanda128$Weather",
+        "user": "Nanda128",
+        "password": "NandaDBPass"
+    },
     "Weather": {
         "api_key": "56f0bf4f66e774b2d21c5db9afea1cba",
         "default_city": "Limerick",

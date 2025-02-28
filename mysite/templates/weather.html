@@ -18,30 +18,40 @@
                 <option value="metric" {% if selected_units == 'metric' %}selected{% endif %}>Metric</option>
                 <option value="imperial" {% if selected_units == 'imperial' %}selected{% endif %}>Imperial</option>
             </select>
+            <label for="approach">Choose approach:</label>
+            <select name="approach" id="approach" class="dropdown-box">
+                <option value="db-full" {% if selected_approach == 'db-full' %}selected{% endif %}>DB-full</option>
+                <option value="db-less" {% if selected_approach == 'db-less' %}selected{% endif %}>DB-less</option>
+            </select>
             <button type="submit">Get Weather</button>
         </form>
     </div>
     <div class="weather-container">
         {% if weather %}
-            <p>Location: {{ weather.name }}</p>
-            <p>Temperature: {{ weather.main.temp }}°{% if selected_units == 'metric' %}C{% else %}F{% endif %}</p>
-            <p>Feels Like: {{ weather.main.feels_like }}°{% if selected_units == 'metric' %}C{% else %}F{% endif %}</p>
-            <p>Min Temperature: {{ weather.main.temp_min }}°{% if selected_units == 'metric' %}C{% else %}F{% endif %}</p>
-            <p>Max Temperature: {{ weather.main.temp_max }}°{% if selected_units == 'metric' %}C{% else %}F{% endif %}</p>
-            <p>Pressure: {{ weather.main.pressure }} hPa</p>
-            <p>Humidity: {{ weather.main.humidity }}%</p>
-            <p>Visibility: {{ weather.visibility }} meters</p>
-            <p>Wind Speed: {{ weather.wind.speed }} m/s</p>
-            <p>Wind Direction: {{ weather.wind.deg }}°</p>
-            <p>Wind Gust: {{ weather.wind.gust }} m/s</p>
-            <p>Cloudiness: {{ weather.clouds.all }}%</p>
-            <p>Weather: {{ weather.weather[0].description }}</p>
+            <div class="weather-details">
+                <p><strong>Location:</strong> {{ weather.name }}</p>
+                <p><strong>Temperature:</strong> {{ weather.main.temp }}°{% if selected_units == 'metric' %}C{% else %}F{% endif %}</p>
+                <p><strong>Feels Like:</strong> {{ weather.main.feels_like }}°{% if selected_units == 'metric' %}C{% else %}F{% endif %}</p>
+                <p><strong>Min Temperature:</strong> {{ weather.main.temp_min }}°{% if selected_units == 'metric' %}C{% else %}F{% endif %}</p>
+                <p><strong>Max Temperature:</strong> {{ weather.main.temp_max }}°{% if selected_units == 'metric' %}C{% else %}F{% endif %}</p>
+                <p><strong>Pressure:</strong> {{ weather.main.pressure }} hPa</p>
+                <p><strong>Humidity:</strong> {{ weather.main.humidity }}%</p>
+                <p><strong>Visibility:</strong> {{ weather.visibility }} meters</p>
+                <p><strong>Wind Speed:</strong> {{ weather.wind.speed }} m/s</p>
+                <p><strong>Wind Direction:</strong> {{ weather.wind.deg }}°</p>
+                <p><strong>Wind Gust:</strong> {{ weather.wind.gust }} m/s</p>
+                <p><strong>Cloudiness:</strong> {{ weather.clouds.all }}%</p>
+            </div>
+            <p><strong>Weather:</strong> {{ weather.weather[0].description }}</p>
             <img src="http://openweathermap.org/img/wn/{{ weather.weather[0].icon }}@2x.png" alt="Weather icon" class="weather-image">
         {% elif error %}
             <p>{{ error }}</p>
         {% else %}
             <p>Unable to fetch weather data.</p>
         {% endif %}
+    </div>
+    <div class="time-taken">
+        <p>Time taken: {{ time_taken }} ms</p>
     </div>
     <a href="{{ url_for('index') }}">
         <button type="button">Back</button>

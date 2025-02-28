@@ -4,6 +4,7 @@ import json
 import plotly.graph_objs as go
 from db import save_processes_to_db, fetch_latest_data_from_db
 from weather import get_lat_lon, fetch_weather_data
+import time
 
 app = Flask(__name__)
 app.secret_key = 'ubersecretkey'  # Needed for flashing messages
@@ -84,21 +85,27 @@ def generate_ram_gauge(ram_usage):
 @app.route('/weather', methods=['GET', 'POST'])
 def weather():
     api_key = config['Weather']['api_key']
-    city, units = get_city_and_units()
+    city, units, approach = get_city_units_approach()
     lat, lon = get_lat_lon(api_key, city)
-    weather_data, error = fetch_weather_data(api_key, lat, lon, units) if lat and lon else (None, "City not found")
-    return render_template('weather.html', weather=weather_data, selected_city=city, selected_units=units, error=error)
+    start_time = time.time()
+    use_db = approach == 'db-full'
+    weather_data, error = fetch_weather_data(api_key, lat, lon, units, use_db, config, city) if lat and lon else (None, "City not found")
+    time_taken = int((time.time() - start_time) * 1000)
+    return render_template('weather.html', weather=weather_data, selected_city=city, selected_units=units, selected_approach=approach, error=error, time_taken=time_taken)
 
-def get_city_and_units():
+def get_city_units_approach():
     if request.method == 'POST':
         city = request.form['city']
         units = request.form['units']
+        approach = request.form['approach']
         session['last_city'] = city
         session['last_units'] = units
+        session['last_approach'] = approach
     else:
         city = session.get('last_city', config['Weather']['default_city'])
         units = session.get('last_units', config['Weather']['default_units'])
-    return city, units
+        approach = session.get('last_approach', 'db-less')
+    return city, units, approach
 
 if __name__ == '__main__':
     app.run(debug=True)
