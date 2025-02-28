@@ -25,6 +25,16 @@
         {% if weather %}
             <p>Location: {{ weather.name }}</p>
             <p>Temperature: {{ weather.main.temp }}°{% if selected_units == 'metric' %}C{% else %}F{% endif %}</p>
+            <p>Feels Like: {{ weather.main.feels_like }}°{% if selected_units == 'metric' %}C{% else %}F{% endif %}</p>
+            <p>Min Temperature: {{ weather.main.temp_min }}°{% if selected_units == 'metric' %}C{% else %}F{% endif %}</p>
+            <p>Max Temperature: {{ weather.main.temp_max }}°{% if selected_units == 'metric' %}C{% else %}F{% endif %}</p>
+            <p>Pressure: {{ weather.main.pressure }} hPa</p>
+            <p>Humidity: {{ weather.main.humidity }}%</p>
+            <p>Visibility: {{ weather.visibility }} meters</p>
+            <p>Wind Speed: {{ weather.wind.speed }} m/s</p>
+            <p>Wind Direction: {{ weather.wind.deg }}°</p>
+            <p>Wind Gust: {{ weather.wind.gust }} m/s</p>
+            <p>Cloudiness: {{ weather.clouds.all }}%</p>
             <p>Weather: {{ weather.weather[0].description }}</p>
             <img src="http://openweathermap.org/img/wn/{{ weather.weather[0].icon }}@2x.png" alt="Weather icon" class="weather-image">
         {% elif error %}

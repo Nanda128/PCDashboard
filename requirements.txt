@@ -3,4 +3,5 @@ colorlog
 flask
 psutil
 requests
-flask_cors
+mysql.connector
+plotly

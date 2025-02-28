@@ -1,5 +1,6 @@
 CREATE TABLE process_data (
     ID CHAR(36) PRIMARY KEY DEFAULT (UUID()), 
     processes JSON NOT NULL, 
+    ram_usage FLOAT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -16,7 +16,10 @@ class LoggerManager:
     def _initialize_logger(self):
         if not os.path.exists('logs'):
             os.makedirs('logs')
-        with open('config.json', 'r') as f:
+        
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        config_path = os.path.join(script_dir, '../mysite/config.json')
+        with open(config_path, 'r') as f:
             config = json.load(f)
             logging.config.dictConfig(config)
         

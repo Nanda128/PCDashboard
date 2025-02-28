@@ -13,7 +13,7 @@ Nandakishore Vinayakrishnan - 23070854
 
 1. Create a virtual environment:
     ```
-    python -m venv venv
+    python -m venv .venv
     ```
 
 2. Activate the virtual environment:

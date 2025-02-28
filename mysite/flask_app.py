@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, flash, session
+from markupsafe import Markup
 import json
-from db import save_processes_to_db, fetch_processes_from_db
+import plotly.graph_objs as go
+from db import save_processes_to_db, fetch_latest_data_from_db
 from weather import get_lat_lon, fetch_weather_data
 
 app = Flask(__name__)
@@ -30,26 +32,54 @@ def processes():
 
 def handle_post_request():
     try:
-        processes = request.get_json()
-        if not processes:
+        data = request.get_json()
+        if not data:
             raise ValueError('No JSON data received')
-        save_processes_to_db(config, processes)
+        process_data = data['processes'] if 'processes' in data else []
+        ram_usage = data['ram_usage'] if 'ram_usage' in data else None
+        save_processes_to_db(config, process_data, ram_usage)
         flash('Processes data successfully saved to the database.', 'success')
     except (ValueError, json.JSONDecodeError) as e:
         flash(f'Error processing JSON data: {e}', 'error')
     except Exception as e:
         flash(f'Error: {e}', 'error')
-    return render_template('processes.html')
+    return 'OK', 200
 
 def handle_get_request():
     try:
-        processes = fetch_processes_from_db(config)
-        if not processes:
+        data = fetch_latest_data_from_db(config)
+        process_data = json.loads(data[0]['processes']) if data else {}
+        ram_usage = data[0]['ram_usage'] if data else None
+
+        if not process_data:
             flash('No processes found in the database.', 'info')
+        if ram_usage is None:
+            flash('No RAM usage data found in the database.', 'info')
+
+        gauge = generate_ram_gauge(ram_usage) if ram_usage is not None else None
+        gauge_html = Markup(gauge.to_html(full_html=False)) if gauge else None
     except Exception as e:
         flash(f'Error: {e}', 'error')
-        processes = None
-    return render_template('processes.html', processes=processes)
+        process_data = {}
+        gauge_html = None
+    return render_template('processes.html', processes=process_data, gauge_html=gauge_html)
+
+def generate_ram_gauge(ram_usage):
+    fig = go.Figure(go.Indicator(
+        mode="gauge+number",
+        value=ram_usage,
+        title={'text': "RAM Usage"},
+        gauge={
+            'axis': {'range': [0, 100]},
+            'bar': {'color': "darkblue"},
+            'steps': [
+                {'range': [0, 50], 'color': "green"},
+                {'range': [50, 75], 'color': "yellow"},
+                {'range': [75, 100], 'color': "red"}
+            ]
+        }
+    ))
+    return fig
 
 @app.route('/weather', methods=['GET', 'POST'])
 def weather():

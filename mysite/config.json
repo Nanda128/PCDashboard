@@ -41,7 +41,7 @@
     "Server": {
         "host": "https://nanda128.eu.pythonanywhere.com"
     },
-    "Database": {
+    "ProcessDatabase": {
         "host": "Nanda128.mysql.eu.pythonanywhere-services.com",
         "database": "Nanda128$Processes",
         "user": "Nanda128",
