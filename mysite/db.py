@@ -107,4 +107,4 @@ def fetch_weather_from_db(config, city, units):
     """
     query = "SELECT data FROM weather_data WHERE city = %s AND units = %s ORDER BY created_at DESC LIMIT 1"
     result = execute_query(config, 'WeatherDatabase', query, (city, units), fetch_all=True)
-    return json.loads(result['data']) if result else None
+    return json.loads(result[0]['data']) if result else None
