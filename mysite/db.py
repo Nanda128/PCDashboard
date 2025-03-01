@@ -80,7 +80,7 @@ def fetch_latest_data_from_db(config):
         result : Latest process data
     """
     query = "SELECT processes, ram_usage FROM process_data ORDER BY created_at DESC LIMIT 1"
-    return execute_query(config, 'ProcessDatabase', query, fetch_one=True)
+    return execute_query(config, 'ProcessDatabase', query, fetch_all=True)
 
 def save_weather_to_db(config, city, units, data):
     """Save weather data to the database
@@ -106,5 +106,5 @@ def fetch_weather_from_db(config, city, units):
         result : Weather data JSON
     """
     query = "SELECT data FROM weather_data WHERE city = %s AND units = %s ORDER BY created_at DESC LIMIT 1"
-    result = execute_query(config, 'WeatherDatabase', query, (city, units), fetch_one=True)
+    result = execute_query(config, 'WeatherDatabase', query, (city, units), fetch_all=True)
     return json.loads(result['data']) if result else None
