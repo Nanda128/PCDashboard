@@ -2,13 +2,12 @@ import mysql.connector
 import json
 
 class DatabaseConnection:
-    def __init__(self, config, db_type):
+    def __init__(self, config):
         self.config = config
-        self.db_type = db_type
         self.connection = None
 
     def __enter__(self):
-        db_config = self.config[self.db_type]
+        db_config = self.config['Database']
         self.connection = mysql.connector.connect(
             host=db_config['host'],
             database=db_config['database'],
@@ -34,12 +33,11 @@ class DatabaseCursor:
         if self.cursor:
             self.cursor.close()
 
-def execute_query(config, db_type, query, params=None, fetch_one=False, fetch_all=False):
+def execute_query(config, query, params=None, fetch_one=False, fetch_all=False):
     """Execute a query on the database
 
     Args:
         config : Configuration settings from config.json
-        db_type : Type of database to connect to
         query : SQL query to execute
         params (optional): Parameters to pass to the query. Defaults to None
         fetch_one (optional): Whether to fetch only one result. Defaults to False
@@ -48,7 +46,7 @@ def execute_query(config, db_type, query, params=None, fetch_one=False, fetch_al
     Returns:
         result : Result of the query if fetch_one or fetch_all is True
     """
-    with DatabaseConnection(config, db_type) as connection:
+    with DatabaseConnection(config) as connection:
         with DatabaseCursor(connection) as cursor:
             cursor.execute(query, params)
             if fetch_one:
@@ -59,7 +57,7 @@ def execute_query(config, db_type, query, params=None, fetch_one=False, fetch_al
                 return result if result else []
             connection.commit()
 
-def save_processes_to_db(config, processes, ram_usage):
+def save_processes_to_db(config, processes, ram_usage, battery_percentage):
     """Save process data to the database
 
     Args:
@@ -67,8 +65,8 @@ def save_processes_to_db(config, processes, ram_usage):
         processes : Dictionary of running processes
         ram_usage : RAM usage percentage
     """
-    query = "INSERT INTO process_data (processes, ram_usage) VALUES (%s, %s)"
-    execute_query(config, 'ProcessDatabase', query, (json.dumps(processes), ram_usage))
+    query = "INSERT INTO process_data (processes, ram_usage, battery_usage) VALUES (%s, %s, %s)"
+    execute_query(config, query, (json.dumps(processes), ram_usage, battery_percentage))
 
 def fetch_latest_data_from_db(config):
     """Fetch the latest process data from the database
@@ -79,8 +77,8 @@ def fetch_latest_data_from_db(config):
     Returns:
         result : Latest process data
     """
-    query = "SELECT processes, ram_usage FROM process_data ORDER BY created_at DESC LIMIT 1"
-    return execute_query(config, 'ProcessDatabase', query, fetch_all=True)
+    query = "SELECT processes, ram_usage, battery_usage FROM process_data ORDER BY created_at DESC LIMIT 1"
+    return execute_query(config, query, fetch_all=True)
 
 def save_weather_to_db(config, city, units, data):
     """Save weather data to the database
@@ -92,7 +90,7 @@ def save_weather_to_db(config, city, units, data):
         data : Weather data JSON
     """
     query = "INSERT INTO weather_data (city, units, data) VALUES (%s, %s, %s)"
-    execute_query(config, 'WeatherDatabase', query, (city, units, json.dumps(data)))
+    execute_query(config, query, (city, units, json.dumps(data)))
 
 def fetch_weather_from_db(config, city, units):
     """Fetch weather data from the database
@@ -106,5 +104,5 @@ def fetch_weather_from_db(config, city, units):
         result : Weather data JSON
     """
     query = "SELECT data FROM weather_data WHERE city = %s AND units = %s ORDER BY created_at DESC LIMIT 1"
-    result = execute_query(config, 'WeatherDatabase', query, (city, units), fetch_all=True)
+    result = execute_query(config, query, (city, units), fetch_all=True)
     return json.loads(result[0]['data']) if result else None

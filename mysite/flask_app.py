@@ -5,6 +5,7 @@ import plotly.graph_objs as go
 from db import save_processes_to_db, fetch_latest_data_from_db
 from weather import get_lat_lon, fetch_weather_data
 import time
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'ubersecretkey'  # Needed for flashing messages
@@ -55,7 +56,8 @@ def handle_post_request():
             raise ValueError('No JSON data received')
         process_data = data.get('processes', [])
         ram_usage = data.get('ram_usage')
-        save_processes_to_db(config, process_data, ram_usage)
+        battery_percentage = data.get('battery_percentage')
+        save_processes_to_db(config, process_data, ram_usage, battery_percentage)
         flash('Processes data successfully saved to the database.', SUCCESS)
     except (ValueError, json.JSONDecodeError) as e:
         flash(f'Error processing JSON data: {e}', ERROR)
@@ -73,6 +75,7 @@ def handle_get_request():
         data = fetch_latest_data_from_db(config)
         process_data = json.loads(data[0]['processes']) if data else {}
         ram_usage = data[0]['ram_usage'] if data else None
+        battery_percentage = data[0]['battery_usage'] if data else None
 
         if not process_data:
             flash('No processes found in the database.', INFO)
@@ -81,11 +84,18 @@ def handle_get_request():
 
         gauge = generate_ram_gauge(ram_usage) if ram_usage is not None else None
         gauge_html = Markup(gauge.to_html(full_html=False)) if gauge else None
+        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     except Exception as e:
         flash(f'Error: {e}', ERROR)
         process_data = {}
         gauge_html = None
-    return render_template('processes.html', processes=process_data, gauge_html=gauge_html)
+        battery_percentage = None
+        current_time = None
+    return render_template('processes.html', 
+                        processes=process_data, 
+                        gauge_html=gauge_html,
+                        battery_percentage=battery_percentage, 
+                        current_time=current_time)
 
 def generate_ram_gauge(ram_usage):
     """Generates a Plotly gauge chart for RAM usage

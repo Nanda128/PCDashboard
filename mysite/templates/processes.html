@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <div style="display: flex; justify-content: space-between;">
+        <div id="battery">Battery: {{ battery_percentage }}%</div>
+        <div id="time">{{ current_time }} UTC</div>
+    </div>
     <h1>Running Processes & RAM Usage</h1>
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}

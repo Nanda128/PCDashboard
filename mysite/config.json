@@ -41,15 +41,9 @@
     "Server": {
         "host": "https://nanda128.eu.pythonanywhere.com"
     },
-    "ProcessDatabase": {
+    "Database": {
         "host": "Nanda128.mysql.eu.pythonanywhere-services.com",
-        "database": "Nanda128$Processes",
-        "user": "Nanda128",
-        "password": "NandaDBPass"
-    },
-    "WeatherDatabase": {
-        "host": "Nanda128.mysql.eu.pythonanywhere-services.com",
-        "database": "Nanda128$Weather",
+        "database": "Nanda128$DataBase",
         "user": "Nanda128",
         "password": "NandaDBPass"
     },
