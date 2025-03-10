@@ -34,5 +34,5 @@ https://github.com/Nanda128/PCDashboard
 
 4. Run the program:
     ```
-    python main.py
+    python local_controller.py
     ```
