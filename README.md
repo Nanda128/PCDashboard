@@ -3,15 +3,12 @@
 ## Author
 Nandakishore Vinayakrishnan - 23070854
 
-## Description
-[DESCRIPTION IN PROGRESS]
-
-## Features
-[FEATURES IN PROGRESS]
-
 ## PythonAnywhere Link:
 
 https://nanda128.eu.pythonanywhere.com/
+
+## GitHub Link:
+https://github.com/Nanda128/PCDashboard
 
 ## Setting up the virtual environment
 
