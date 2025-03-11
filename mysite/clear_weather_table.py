@@ -19,10 +19,10 @@ def clear_weather_table(config):
         config (dict) : Configuration settings from config.json
     """
     connection = mysql.connector.connect(
-        host=['DataBase']['host'],
-        database=['DataBase']['database'],
-        user=['DataBase']['user'],
-        password=['DataBase']['password']
+        host=['Database']['host'],
+        database=['Database']['database'],
+        user=['Database']['user'],
+        password=['Database']['password']
     )
     cursor = connection.cursor()
     cursor.execute("DELETE FROM weather_data")
